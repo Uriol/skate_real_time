@@ -1,4 +1,7 @@
 var socket = io.connect('http://localhost:8080');
+// Sending 5 seconds of data
+
+
 
 var halfJump = false;
 var centerPosition = 0;
@@ -20,11 +23,20 @@ var time = 0.02;
 
 var minus180 = false;
 var plus180 = false;
+
+// var multiplier = 100;
+// var airMultiplier = 140;
+var multiplier;
+var airMultiplier;
+
+
 // Just landed a trick. Show me.
 $('#viewTrick').on('click', function(){
 	//console.log('show trick');
 	resetValues();
 	socket.emit('trick data');
+	multiplier = 100;
+	airMultiplier = 150;
 	// if (recording) {
 	// 	recording = false;
 	// 	socket.emit('trick data');
@@ -38,6 +50,8 @@ $('#viewTrick').on('click', function(){
 
 // trick test
 $('#trick_one').on('click', function(){
+	multiplier = 100;
+	airMultiplier = 100;
 
 	resetValues();
 	show_visualizationPage();
@@ -51,6 +65,8 @@ $('#trick_one').on('click', function(){
 })
 
 $('#trick_two').on('click', function(){
+	multiplier = 100;
+	airMultiplier = 100;
 
 	resetValues();
 	show_visualizationPage();
@@ -64,6 +80,9 @@ $('#trick_two').on('click', function(){
 })
 
 $('#trick_three').on('click', function(){
+
+	multiplier = 100;
+	airMultiplier = 100;
 
 	resetValues();
 	show_visualizationPage();
@@ -135,6 +154,10 @@ function parseData( data ) {
 		// 	line[0] = $x_Accel[i-1];
 		// }
 
+		// z accel transform to decimal
+		line[1] = line[1]/10;
+		console.log(line[1]);
+
 		 if (isNaN(line[1]) == true) {
 		 	 line[1] = $z_Accel[i-1];
 			console.log('NaN detected' + $z_Accel[i-1])
@@ -174,7 +197,9 @@ function parseData( data ) {
 		slice_start = i >= slice_num/2 ? i-slice_num/2 : 0;
 		sliced = $z_Accel.slice(slice_start, slice_start + slice_num);
 		sliced.forEach(function(value,index){
+			//if (value < 0){ value = value*-1;}
 			average += value == 0 ? 0 : 1;
+			console.log(value);
 		});
 		average = average / slice_num;
 
@@ -453,37 +478,4 @@ function resetValues(){
 	jumpDistance = 0;
 	jumpHeight = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

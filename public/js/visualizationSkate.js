@@ -1,4 +1,4 @@
-var ANIMATION_SPEED = 25,
+var ANIMATION_SPEED = 30,
 	ANIMATION_DELAY = 500; // Milliseconds between each frame
 var animationInterval;
 // Setup environment
@@ -10,7 +10,7 @@ renderer = new THREE.WebGLRenderer();
 // animate();
 
 //console.log(centerPosition);
-var multiplier = 100;
+// var multiplier = 100;
 
 function init_Visualization(){
 
@@ -27,7 +27,7 @@ function init_Visualization(){
 	//var centerX = centerPosition;
 	// console.log('centerX' + centerPosition)
 	var backgroundColor = new THREE.Color("rgb(20, 20, 20)");
-	camera.position.set(0,120,160);
+	camera.position.set(0,120,180);
 	camera.lookAt(scene.position);
 	renderer.setClearColor( backgroundColor );
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -312,6 +312,16 @@ function init_Visualization(){
 		var leftBottomLineMesh = new THREE.Line( leftBottomLine, blueLineMaterial );
 
 
+		var centerRotation;
+		if ($total_pitchs[j] < $total_pitchs[j-1]){
+			centerRotation = -24;
+		} else if ($total_pitchs[j] > $total_pitchs[j-1]){
+			centerRotation = 24;
+		} else {
+			centerRotation = 0;
+		}
+
+
 		$total_rolls[j] = $total_rolls[j]*pi/180;
 		$total_pitchs[j] = $total_pitchs[j]*pi/180;
 		// 'XYZ', 'YXZ', 'ZXY', 'ZYX', 'YZX', XZY
@@ -320,11 +330,23 @@ function init_Visualization(){
 		quaternion.setFromEuler(euler, 'YZX');
 
 
+		 skateboard.matrixAutoUpdate = true;
+		//skateboard.center(-24,0,0);
+		skateboard.setRotationFromQuaternion(quaternion);
+		//skateboard.matrix.setPosition(-24,-24,0);
+		skateboard.position.x = this_y_position*multiplier-centerX; //-2000;
+		skateboard.position.z = this_x_position*multiplier;
+		skateboard.position.y = this_z_position*airMultiplier;
+		skateboard.matrixAutoUpdate = false;
+		skateboard.updateMatrix();
+		 scene.add(skateboard);
+
+
 		skateboard.matrixAutoUpdate = true;
 		skateboard.setRotationFromQuaternion(quaternion);
 		skateboard.position.x = this_y_position*multiplier-centerX; //-2000;
 		skateboard.position.z = this_x_position*multiplier;
-		skateboard.position.y = this_z_position*multiplier;
+		skateboard.position.y = this_z_position*airMultiplier;
 		skateboard.updateMatrix();
 		scene.add(skateboard);
 
@@ -332,7 +354,7 @@ function init_Visualization(){
 		topNoseMesh.setRotationFromQuaternion(quaternion);
 		topNoseMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		topNoseMesh.position.z = this_x_position*multiplier;
-		topNoseMesh.position.y = this_z_position*multiplier;
+		topNoseMesh.position.y = this_z_position*airMultiplier;
 		topNoseMesh.updateMatrix();
 		scene.add(topNoseMesh);
 
@@ -340,7 +362,7 @@ function init_Visualization(){
 		bottomNoseMesh.setRotationFromQuaternion(quaternion);
 		bottomNoseMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		bottomNoseMesh.position.z = this_x_position*multiplier;
-		bottomNoseMesh.position.y = this_z_position*multiplier;
+		bottomNoseMesh.position.y = this_z_position*airMultiplier;
 		bottomNoseMesh.updateMatrix();
 		scene.add(bottomNoseMesh);
 
@@ -348,7 +370,7 @@ function init_Visualization(){
 		noseRightEdgeMesh.setRotationFromQuaternion(quaternion);
 		noseRightEdgeMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		noseRightEdgeMesh.position.z = this_x_position*multiplier;
-		noseRightEdgeMesh.position.y = this_z_position*multiplier;
+		noseRightEdgeMesh.position.y = this_z_position*airMultiplier;
 		noseRightEdgeMesh.updateMatrix();
 		scene.add(noseRightEdgeMesh);
 
@@ -356,7 +378,7 @@ function init_Visualization(){
 		noseLeftEdgeMesh.setRotationFromQuaternion(quaternion);
 		noseLeftEdgeMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		noseLeftEdgeMesh.position.z = this_x_position*multiplier;
-		noseLeftEdgeMesh.position.y = this_z_position*multiplier;
+		noseLeftEdgeMesh.position.y = this_z_position*airMultiplier;
 		noseLeftEdgeMesh.updateMatrix();
 		scene.add(noseLeftEdgeMesh);
 
@@ -364,7 +386,7 @@ function init_Visualization(){
 		topTailMesh.setRotationFromQuaternion(quaternion);
 		topTailMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		topTailMesh.position.z = this_x_position*multiplier;
-		topTailMesh.position.y = this_z_position*multiplier;
+		topTailMesh.position.y = this_z_position*airMultiplier;
 		topTailMesh.updateMatrix();
 		scene.add(topTailMesh);
 
@@ -372,7 +394,7 @@ function init_Visualization(){
 		bottomTailMesh.setRotationFromQuaternion(quaternion);
 		bottomTailMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		bottomTailMesh.position.z = this_x_position*multiplier;
-		bottomTailMesh.position.y = this_z_position*multiplier;
+		bottomTailMesh.position.y = this_z_position*airMultiplier;
 		bottomTailMesh.updateMatrix();
 		scene.add(bottomTailMesh);
 
@@ -380,7 +402,7 @@ function init_Visualization(){
 		tailRightEdgeMesh.setRotationFromQuaternion(quaternion);
 		tailRightEdgeMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		tailRightEdgeMesh.position.z = this_x_position*multiplier;
-		tailRightEdgeMesh.position.y = this_z_position*multiplier;
+		tailRightEdgeMesh.position.y = this_z_position*airMultiplier;
 		tailRightEdgeMesh.updateMatrix();
 		scene.add(tailRightEdgeMesh);
 
@@ -388,7 +410,7 @@ function init_Visualization(){
 		tailLeftEdgeMesh.setRotationFromQuaternion(quaternion);
 		tailLeftEdgeMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		tailLeftEdgeMesh.position.z = this_x_position*multiplier;
-		tailLeftEdgeMesh.position.y = this_z_position*multiplier;
+		tailLeftEdgeMesh.position.y = this_z_position*airMultiplier;
 		tailLeftEdgeMesh.updateMatrix();
 		scene.add(tailLeftEdgeMesh);
 
@@ -396,7 +418,7 @@ function init_Visualization(){
 		rightTopLineMesh.setRotationFromQuaternion(quaternion);
 		rightTopLineMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		rightTopLineMesh.position.z = this_x_position*multiplier;
-		rightTopLineMesh.position.y = this_z_position*multiplier;
+		rightTopLineMesh.position.y = this_z_position*airMultiplier;
 		rightTopLineMesh.updateMatrix();
 		scene.add(rightTopLineMesh);
 
@@ -404,7 +426,7 @@ function init_Visualization(){
 		rightBottomLineMesh.setRotationFromQuaternion(quaternion);
 		rightBottomLineMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		rightBottomLineMesh.position.z = this_x_position*multiplier;
-		rightBottomLineMesh.position.y = this_z_position*multiplier;
+		rightBottomLineMesh.position.y = this_z_position*airMultiplier;
 		rightBottomLineMesh.updateMatrix();
 		scene.add(rightBottomLineMesh);
 
@@ -412,7 +434,7 @@ function init_Visualization(){
 		leftTopLineMesh.setRotationFromQuaternion(quaternion);
 		leftTopLineMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		leftTopLineMesh.position.z = this_x_position*multiplier;
-		leftTopLineMesh.position.y = this_z_position*multiplier;
+		leftTopLineMesh.position.y = this_z_position*airMultiplier;
 		leftTopLineMesh.updateMatrix();
 		scene.add(leftTopLineMesh);
 
@@ -420,7 +442,7 @@ function init_Visualization(){
 		leftBottomLineMesh.setRotationFromQuaternion(quaternion);
 		leftBottomLineMesh.position.x = this_y_position*multiplier-centerX; //-2000;
 		leftBottomLineMesh.position.z = this_x_position*multiplier;
-		leftBottomLineMesh.position.y = this_z_position*multiplier;
+		leftBottomLineMesh.position.y = this_z_position*airMultiplier;
 		leftBottomLineMesh.updateMatrix();
 		scene.add(leftBottomLineMesh);
 
