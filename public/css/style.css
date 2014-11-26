@@ -1,7 +1,18 @@
 #viewTrick{
 	width: 100px;
 	height: 100px;
-	position: absolute;
+
 	background-color: black;
 	cursor: pointer;
+	float: left;
+}
+
+
+#trickTest {
+	width: 100px;
+	height: 100px;
+	margin-left: 20px;
+	background-color: red;
+	cursor: pointer;
+	float: left;
 }
