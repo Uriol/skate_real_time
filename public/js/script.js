@@ -10,6 +10,9 @@ $('#viewTrick').on('click', function(){
 
 // trick test
 $('#trickTest').on('click', function(){
+
+	show_visualizationPage();
+
 	parseData(trickTest);
 	//console.log(trickTest);
 	switchState();
