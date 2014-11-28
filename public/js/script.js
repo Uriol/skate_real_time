@@ -12,7 +12,7 @@ $('#viewTrick').on('click', function(){
 $('#trickTest').on('click', function(){
 
 	show_visualizationPage();
-
+	//render();
 	parseData(trickTest);
 	//console.log(trickTest);
 	switchState();
@@ -146,7 +146,7 @@ function onGround(){
 		// Calculate x position
 		xPosition = xInitialPosition + xSpeed*time;
 		xInitialPosition = xPosition;
-		console.log('xposition: ' + xPosition);
+		//console.log('xposition: ' + xPosition);
 
 		// Calculate y position
 		ySpeed = totalSpeed*Math.cos(total_angle_diff);
@@ -154,7 +154,7 @@ function onGround(){
 		// Calculate yPosition
 		yPosition = yInitialPosition + ySpeed*time;
 		yInitialPosition = yPosition;
-		console.log('yPosition: ' + yPosition);
+		//console.log('yPosition: ' + yPosition);
 
 		z_position = 0;
 	//}
@@ -192,11 +192,11 @@ function onAir(){
 	// Keep x and y speed and positions constant
 	xPosition = xInitialPosition + xSpeed*time;
 	xInitialPosition = xPosition;
-	console.log('xposition on air: ' + xPosition);
+	//console.log('xposition on air: ' + xPosition);
 
 	yPosition = yInitialPosition + ySpeed*time;
 	yInitialPosition = yPosition;
-	console.log('yPosition on air: ' + yPosition);
+	//console.log('yPosition on air: ' + yPosition);
 }
 
 var initialYawOnJumping;

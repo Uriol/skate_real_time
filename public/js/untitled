@@ -1,0 +1,61 @@
+
+// Setup environment
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 10000);
+var renderer = new THREE.WebGLRenderer();
+renderer.setClearColor( 0xf0f0f0 );
+renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+$('#visualizationPage').append(renderer.domElement);
+
+init();
+animate();
+
+function init(){
+	var geometry = new THREE.BoxGeometry( 20,20,20 );
+
+	for ( var i = 0; i < 10; i ++ ) {
+		
+		var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+
+		object.position.x = Math.random() * 800 - 400;
+		object.position.y = Math.random() * 800 - 400;
+		object.position.z = Math.random() * 800 - 400;
+
+		object.rotation.x = Math.random() * 2 * Math.PI;
+		object.rotation.y = Math.random() * 2 * Math.PI;
+		object.rotation.z = Math.random() * 2 * Math.PI;
+
+		object.scale.x = Math.random() + 0.5;
+		object.scale.y = Math.random() + 0.5;
+		object.scale.z = Math.random() + 0.5;
+
+		scene.add( object );
+	}
+
+	window.addEventListener( 'resize', onWindowResize, false );
+}
+
+
+
+
+// scene.add(cubes);
+ // camera.position.z = 2
+
+// Add OrbitControls so that we can pan around with the mouse.
+controls = new THREE.OrbitControls(camera, document, renderer.domElement);
+
+var render = function(){
+
+
+	requestAnimationFrame(render);
+
+	 // cube.rotation.x += 0.001;
+	 // cube.rotation.y += 0.001;
+
+	renderer.render(scene, camera);
+	controls.update();
+
+}
+
+render();
