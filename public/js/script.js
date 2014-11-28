@@ -32,6 +32,9 @@ var $x_Accel = [],
 
 var $total_x_positions = [];
 var $total_y_positions = [];
+var $total_yaws = [];
+var $total_pitchs = [];
+var $total_rolls = [];
 
 var z_Accel;
 var state;
@@ -165,6 +168,11 @@ function onGround(){
 		//console.log('yPosition: ' + yPosition);
 
 		z_position = 0;
+
+		// Save yaw, pitch, roll
+		$total_yaws.push($yaw[k]);
+		$total_pitchs.push($pitch[k]);
+		$total_rolls.push($roll[k]);
 	//}
 }
 

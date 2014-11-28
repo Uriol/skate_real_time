@@ -8,12 +8,14 @@ var camera, scene, renderer;
 
 function init_Visualization(){
 
+
+
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
 	scene = new THREE.Scene();
 	// camera.position.set( 90, 0, 10 );
 	// camera.position.x = 50;
 	// camera.position.z = 50;
-	camera.position.set(0,150,400);
+	camera.position.set(0,150,150);
 	camera.lookAt(scene.position);
 	 // camera.position.x = 500;
 
@@ -26,9 +28,10 @@ function init_Visualization(){
 	//controls = new THREE.TrackballControls( camera );
   	
 
-	var geometry = new THREE.BoxGeometry( 20,20,20 );
+	 var geometry = new THREE.BoxGeometry( 40,5,10 );
+	//var geometry = new THREE.BoxGeometry( 5,40,10 );
 	
-
+	console.log($total_yaws);
 	var this_x_position;
 	var this_y_position;
 	for ( var i = 0; i < $total_x_positions.length; i ++ ) {
@@ -37,35 +40,29 @@ function init_Visualization(){
 
 		var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
-		object.position.x = this_y_position*100;
-		object.position.z = this_x_position*100;
+		object.position.x = this_y_position*1000;
+		object.position.z = this_x_position*200;
+		// object.position.x = this_x_position*500;
+		// object.position.y = this_y_position*500;
 
 
-
-		// object.rotation.x = -Math.PI/2;
-		// object.rotation.y = -0.5;
-		//object.position.set(this_y_position, 0, this_x_position)
-		 
-		// object.position.y = this_y_position*-100;
-		// object.position.z = 0;
-
-
-		// object.translateX(2.5);
-		// object.translateY(2);
-		// object.position.y = Math.random() * 800 - 400;
-		// object.position.z = Math.random() * 800 - 400;
-
-		// object.rotation.x = Math.random() * 2 * Math.PI;
-		// object.rotation.y = Math.random() * 2 * Math.PI;
-		// object.rotation.z = Math.random() * 2 * Math.PI;
-
-		// object.scale.x = Math.random() + 0.5;
-		// object.scale.y = Math.random() + 0.5;
-		// object.scale.z = Math.random() + 0.5;
-
+		// Calculate quaternion
+		// degrees to radians
+		$total_yaws[i] = $total_yaws[i]*pi/180;
+		$total_rolls[i] = $total_rolls[i]*pi/180;
+		$total_pitchs[i] = $total_pitchs[i]*pi/180;
+		// 'XYZ', 'YXZ', 'ZXY', 'ZYX', 'YZX', XZY
+		var euler =  new THREE.Euler(  $total_rolls[i], $total_yaws[i],$total_pitchs[i],'YZX');
+		var quaternion = new THREE.Quaternion();
+		quaternion.setFromEuler(euler, 'YZX');
+		console.log(quaternion);
+		object.setRotationFromQuaternion(quaternion);
 
 		scene.add( object );
 	}
+
+	// var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ) );
+	// scene.add( object );
 
 
 	var floorMaterial = new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } );
@@ -76,6 +73,8 @@ function init_Visualization(){
 	scene.add(floor);
 
 	window.addEventListener( 'resize', onWindowResize, false );
+
+
 
 }
 
