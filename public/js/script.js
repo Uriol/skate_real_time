@@ -16,6 +16,9 @@ $('#trickTest').on('click', function(){
 	parseData(trickTest);
 	//console.log(trickTest);
 	switchState();
+	console.log($total_x_positions);
+	init_Visualization();
+	animate();
 	resetValues();
 })
 
@@ -26,6 +29,9 @@ var $x_Accel = [],
 	$pitch = [],
 	$roll = [],
 	$state = [];
+
+var $total_x_positions = [];
+var $total_y_positions = [];
 
 var z_Accel;
 var state;
@@ -146,6 +152,7 @@ function onGround(){
 		// Calculate x position
 		xPosition = xInitialPosition + xSpeed*time;
 		xInitialPosition = xPosition;
+		$total_x_positions.push(xPosition);
 		//console.log('xposition: ' + xPosition);
 
 		// Calculate y position
@@ -154,6 +161,7 @@ function onGround(){
 		// Calculate yPosition
 		yPosition = yInitialPosition + ySpeed*time;
 		yInitialPosition = yPosition;
+		$total_y_positions.push(yPosition);
 		//console.log('yPosition: ' + yPosition);
 
 		z_position = 0;
@@ -263,20 +271,6 @@ function resetValues(){
 
 
 
-
-
-
-
-/*
-
-v = 0.5*9.81*t ===> t = total time on air
-
-z_position = v*t-0.5*9.81*t*t =====> t = elapsed time on air
-
-
-
-mat flip 25 intervals on air
-*/
 
 
 
