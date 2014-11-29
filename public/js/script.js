@@ -16,7 +16,7 @@ $('#trickTest').on('click', function(){
 	parseData(trickTest);
 	//console.log(trickTest);
 	switchState();
-	console.log($total_x_positions);
+	//console.log($total_x_positions);
 	init_Visualization();
 	animate();
 	resetValues();
@@ -32,6 +32,7 @@ var $x_Accel = [],
 
 var $total_x_positions = [];
 var $total_y_positions = [];
+var $total_z_positions = [];
 var $total_yaws = [];
 var $total_pitchs = [];
 var $total_rolls = [];
@@ -42,9 +43,12 @@ var state;
 // Recieve trick
 socket.on('trickData', function(trickData){
 	//console.log(trickData);
+	show_visualizationPage();
 	parseData(trickData);
 	//console.log($state);
 	switchState();
+	init_Visualization();
+	animate();
 	//onGround();
 	//console.log('---------------------------------------------------------------------------');
 	// reset all values to call next trick
@@ -64,7 +68,10 @@ var total_time_on_air;
 var airSpeed;
 var gravity = 9.81;
 function parseData( data ) {
-
+	airtime = 0;
+	total_time_on_air = 0;
+	plus180 = false;
+	minus180 = false;
 	// Loop through all the trick data
 	for (var i = 0; i < data.length; i++) {
 		line = data[i];
@@ -90,9 +97,9 @@ function parseData( data ) {
 	}
 
 	total_time_on_air = airtime*0.02; 
-	console.log(total_time_on_air);
+	console.log('total_time_on_air' + total_time_on_air);
 	airSpeed = 0.5*gravity*total_time_on_air;
-	console.log(airSpeed);
+	//console.log(airSpeed);
 }
 
 
@@ -126,6 +133,8 @@ var minus180 = false;
 var plus180 = false;
 function onGround(){
 	console.log('on ground');
+	elapsed_time_on_air = 0;
+	air_interval = 0;
 
 	// if there have been a 180
 	if ( plus180 == true ) { $yaw[k] = $yaw[k] + 180; $roll[k] = $roll[k] *-1; $pitch[k] = $pitch[k] *-1;}
@@ -155,7 +164,7 @@ function onGround(){
 		// Calculate x position
 		xPosition = xInitialPosition + xSpeed*time;
 		xInitialPosition = xPosition;
-		$total_x_positions.push(xPosition);
+		
 		//console.log('xposition: ' + xPosition);
 
 		// Calculate y position
@@ -164,15 +173,18 @@ function onGround(){
 		// Calculate yPosition
 		yPosition = yInitialPosition + ySpeed*time;
 		yInitialPosition = yPosition;
-		$total_y_positions.push(yPosition);
+		
 		//console.log('yPosition: ' + yPosition);
 
 		z_position = 0;
 
 		// Save yaw, pitch, roll
-		$total_yaws.push($yaw[k]);
+		$total_yaws.push(total_angle_diff);
 		$total_pitchs.push($pitch[k]);
 		$total_rolls.push($roll[k]);
+		$total_x_positions.push(xPosition);
+		$total_y_positions.push(yPosition);
+		$total_z_positions.push(z_position);
 	//}
 }
 
@@ -185,7 +197,7 @@ function onAir(){
 	console.log('on air');
 	air_interval += 1;
 	elapsed_time_on_air = air_interval*0.02;
-	//console.log(elapsed_time_on_air);
+	console.log('elapsed_time_on_air: ' + elapsed_time_on_air);
 
 
 
@@ -213,6 +225,24 @@ function onAir(){
 	yPosition = yInitialPosition + ySpeed*time;
 	yInitialPosition = yPosition;
 	//console.log('yPosition on air: ' + yPosition);
+
+	//console.log('yaw: ' + $yaw[j]);
+	if ($yaw[k] < 0 && initialYaw > 0) {
+		total_angle_diff = $yaw[k] - initialYaw;
+	} else if ($yaw[k] > 0 && initialYaw < 0 ){
+		total_angle_diff = $yaw[k] + initialYaw;
+	} else {
+		total_angle_diff = $yaw[k] - initialYaw;
+	}
+	total_angle_diff = total_angle_diff*pi/180;
+
+
+	$total_x_positions.push(xPosition);
+	$total_y_positions.push(yPosition);
+	$total_z_positions.push(z_position);
+	$total_yaws.push(total_angle_diff);
+	$total_pitchs.push($pitch[k]);
+	$total_rolls.push($roll[k]);
 }
 
 var initialYawOnJumping;
@@ -272,6 +302,14 @@ function resetValues(){
 	$pitch = [],
 	$roll = [],
 	$state = [];
+
+	$total_x_positions = [];
+	$total_y_positions = [];
+	$total_z_positions = [];
+	$total_yaws = [];
+	$total_pitchs = [];
+	$total_rolls = [];
+
 }
 
 

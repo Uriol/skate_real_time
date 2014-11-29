@@ -12,4 +12,5 @@ function close_visualizationPage(){
 
 $('#close').on('click', function(){
 	close_visualizationPage();
+	resetValues();
 })

@@ -1,8 +1,9 @@
 
 // Setup environment
 var camera, scene, renderer;
-
-
+camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+scene = new THREE.Scene();
+renderer = new THREE.WebGLRenderer();
 // init_Visualization();
 // animate();
 
@@ -10,16 +11,17 @@ function init_Visualization(){
 
 
 
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-	scene = new THREE.Scene();
+	// camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+	// scene = new THREE.Scene();
+
 	// camera.position.set( 90, 0, 10 );
 	// camera.position.x = 50;
 	// camera.position.z = 50;
-	camera.position.set(0,150,150);
+	camera.position.set(0,50,100);
 	camera.lookAt(scene.position);
 	 // camera.position.x = 500;
 
-	renderer = new THREE.WebGLRenderer();
+	// renderer = new THREE.WebGLRenderer();
 	renderer.setClearColor( 0xf0f0f0 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	$('#visualizationPage').append(renderer.domElement);
@@ -28,36 +30,58 @@ function init_Visualization(){
 	//controls = new THREE.TrackballControls( camera );
   	
 
-	 var geometry = new THREE.BoxGeometry( 40,5,10 );
+	 var geometry = new THREE.BoxGeometry( 40,1,3 );
 	//var geometry = new THREE.BoxGeometry( 5,40,10 );
 	
-	console.log($total_yaws);
+	//console.log($total_yaws);
 	var this_x_position;
 	var this_y_position;
+	var this_z_position;
+
+
+	// Remove previous objects
+	
+	var obj, i;
+	for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
+	    obj = scene.children[ i ];
+	    if ( obj !== camera) {
+	        scene.remove(obj);
+	    }
+	}
+
+
 	for ( var i = 0; i < $total_x_positions.length; i ++ ) {
 		this_x_position = $total_x_positions[i];
 		this_y_position = $total_y_positions[i];
+		this_z_position = $total_z_positions[i];
+		var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ));
 
-		var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-
-		object.position.x = this_y_position*1000;
-		object.position.z = this_x_position*200;
+		
 		// object.position.x = this_x_position*500;
 		// object.position.y = this_y_position*500;
 
 
 		// Calculate quaternion
 		// degrees to radians
-		$total_yaws[i] = $total_yaws[i]*pi/180;
+		//$total_yaws[i] = $total_yaws[i]*pi/180;
 		$total_rolls[i] = $total_rolls[i]*pi/180;
 		$total_pitchs[i] = $total_pitchs[i]*pi/180;
 		// 'XYZ', 'YXZ', 'ZXY', 'ZYX', 'YZX', XZY
-		var euler =  new THREE.Euler(  $total_rolls[i], $total_yaws[i],$total_pitchs[i],'YZX');
+		var euler =  new THREE.Euler(  $total_rolls[i], $total_yaws[i]*-1,$total_pitchs[i],'YZX');
 		var quaternion = new THREE.Quaternion();
 		quaternion.setFromEuler(euler, 'YZX');
-		console.log(quaternion);
+		// console.log(quaternion);
+		// console.log($total_yaws[i]);
+		object.matrixAutoUpdate = true;
 		object.setRotationFromQuaternion(quaternion);
+		
 
+		object.position.x = this_y_position*200-100; //-2000;
+		object.position.z = this_x_position*200;
+		object.position.y = this_z_position*200;
+		// object.translateX(this_y_position*300);
+		//object.translateY(this_x_position*300);
+		object.updateMatrix();
 		scene.add( object );
 	}
 
