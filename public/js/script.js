@@ -1,6 +1,8 @@
 var socket = io.connect('http://localhost:8080');
 
-
+var halfJump = false;
+var centerPosition;
+var interval = 0;
 
 // Just landed a trick. Show me.
 $('#viewTrick').on('click', function(){
@@ -121,7 +123,7 @@ function switchState(){
 	}
 }
 
-var totalSpeed = 2;
+var totalSpeed = 2.5;
 var initialYaw, total_angle_diff;
 var pi = 3.14;
 var xSpeed, ySpeed;
@@ -135,6 +137,16 @@ function onGround(){
 	console.log('on ground');
 	elapsed_time_on_air = 0;
 	air_interval = 0;
+
+	interval += 1;
+
+	// if (jump == true){
+	// 	jump = false;
+	// 	// console.log("total_time_on_air====>: " + total_time_on_air);
+	// 	console.log("x position ====>: " + xPosition);
+	// 	centerPosition = xPosition*-1;
+	// 	console.log('centerPosition ' + centerPosition)
+	// }
 
 	// if there have been a 180
 	if ( plus180 == true ) { $yaw[k] = $yaw[k] + 180; $roll[k] = $roll[k] *-1; $pitch[k] = $pitch[k] *-1;}
@@ -192,13 +204,12 @@ var air_interval = 0;
 var elapsed_time_on_air;
 var z_position = 0;
 function onAir(){
-
+	console.log("total_time_on_air====>: " + total_time_on_air);
 	// Calculate z position
 	console.log('on air');
 	air_interval += 1;
 	elapsed_time_on_air = air_interval*0.02;
 	console.log('elapsed_time_on_air: ' + elapsed_time_on_air);
-
 
 
 	z_position = airSpeed*elapsed_time_on_air-0.5*gravity*elapsed_time_on_air*elapsed_time_on_air;
@@ -219,6 +230,7 @@ function onAir(){
 
 	// Keep x and y speed and positions constant
 	xPosition = xInitialPosition + xSpeed*time;
+
 	xInitialPosition = xPosition;
 	//console.log('xposition on air: ' + xPosition);
 
@@ -226,14 +238,19 @@ function onAir(){
 	yInitialPosition = yPosition;
 	//console.log('yPosition on air: ' + yPosition);
 
-	//console.log('yaw: ' + $yaw[j]);
-	if ($yaw[k] < 0 && initialYaw > 0) {
-		total_angle_diff = $yaw[k] - initialYaw;
-	} else if ($yaw[k] > 0 && initialYaw < 0 ){
-		total_angle_diff = $yaw[k] + initialYaw;
-	} else {
-		total_angle_diff = $yaw[k] - initialYaw;
+	interval += 1;
+	if (elapsed_time_on_air >= total_time_on_air/2 && halfJump == false){
+		halfJump = true;
+		console.log('now --------------------------' + multiplier);
+
+		centerPosition = xPosition*100*interval/2;
+		console.log(centerPosition);
 	}
+
+
+	// }
+	// console.log('total angle difference: ' + total_angle_diff);
+	total_angle_diff = $yaw[k] - initialYaw;
 	total_angle_diff = total_angle_diff*pi/180;
 
 
@@ -241,8 +258,8 @@ function onAir(){
 	$total_y_positions.push(yPosition);
 	$total_z_positions.push(z_position);
 	$total_yaws.push(total_angle_diff);
-	$total_pitchs.push($pitch[k]);
-	$total_rolls.push($roll[k]);
+	$total_pitchs.push($pitch[k]*-1);
+	$total_rolls.push($roll[k]*-1);
 }
 
 var initialYawOnJumping;
@@ -309,6 +326,8 @@ function resetValues(){
 	$total_yaws = [];
 	$total_pitchs = [];
 	$total_rolls = [];
+
+	interval = 0;
 
 }
 
