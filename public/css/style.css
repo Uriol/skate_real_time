@@ -3,6 +3,22 @@
 	height: 100%;
 }
 
+@font-face {
+	font-family: bold;
+	src: url('../fonts/GothamCondensed-Bold.ttf');
+}
+
+@font-face {
+	font-family: medium;
+	src: url('../fonts/GothamCondensed-Medium.ttf');
+}
+
+@font-face {
+	font-family: book;
+	src: url('../fonts/GothamCondensed-Book.ttf');
+}
+
+
 
 #body {
 	width: 100%;
@@ -17,7 +33,7 @@ canvas { width: 100%; height: 100% }
 	width: 100%;
 	height: 100%;
 	position: absolute;
-/*	background-color: yellow;*/
+	background-color: rgb(20,20,20);
 }
 
 #sensorPage.inActive{
@@ -27,23 +43,91 @@ canvas { width: 100%; height: 100% }
 
 
 #sensorPage #viewTrick{
-	width: 100px;
-	height: 100px;
-
-	background-color: black;
+	width: 300px;
+	height: 300px;
+	margin-left: -150px;
+	left: 50%;
+	background:url('../images/sensor.png');
+	background-size: cover;
 	cursor: pointer;
+	position: absolute;
+	margin-top: 100px;
+}
+#sensorPage #ready_text{
+	width: 200px;
+	height: 50px;
+	
+	position: absolute;
+	margin-top: 400px;
+	margin-left: -100px;
+	left: 50%;
+	text-align: center;
+	color: white;
+	letter-spacing: 1px;
+	font-family: medium;
+	font-size: 20px;
+}
+
+/*#sensorPage #ready_text h2{
+	color: white;
+	text-align: center;
+	margin-top: 400px;
+	font-family: medium;
+
+}*/
+
+#sensorPage #previusTricks{
+	width: 1350px;
+	/*background-color: red;*/ 
+/*	height: 500px;*/
+	/*background-color: rgb(184, 228, 20);*/
+	position: absolute;
+	margin-top: 550px;
+	margin-left: -655px;
+	left:50%;
+	/*//bottom: 0px;*/
+	/*margin-left: -565.5px;
+	left: 50%;*/
+}
+
+#sensorPage #previusTricks .trick{
+	width: 400px;
+	margin-top: 20px;
+	height: 300px;
+	
 	float: left;
+	margin-right: 40px;
+	cursor: pointer;
+	/*background-color: yellow;*/
+	 border-style: solid;
+    border-width: 5px;
+    border-color: white;
+}
+
+#sensorPage #previusTricks .trick#trick_one{
+	background: url('../images/trick_one_final.jpg');
+	background-size: cover;
+}
+
+#sensorPage #previusTricks .trick#trick_two{
+	background: url('../images/trick_two_final.jpg');
+	background-size: cover;
+}
+
+#sensorPage #previusTricks .trick#trick_three{
+	background: url('../images/trick_three_final.jpg');
+	background-size: cover;
 }
 
 
-#sensorPage #trickTest {
-	width: 100px;
-	height: 100px;
+/*#sensorPage #trickTest {
+	width: 350px;
+	height: 197px;
 	margin-left: 20px;
 	background-color: red;
 	cursor: pointer;
 	float: left;
-}
+}*/
 
 
 
@@ -66,6 +150,99 @@ canvas { width: 100%; height: 100% }
 	height: 50px;
 	position: absolute;
 	right: 0;
-	background-color: rgb(184, 228, 20);
+	/*background-color: rgb(184, 228, 20);*/
 	cursor: pointer;
+	background: rgb(184, 228, 20) url('../images/quit2.png');
+	background-size: cover;
+}
+
+#visualizationPage.active #data{
+	width: 1000px;
+	height: 100px;
+	position: absolute;
+	left: 50%;
+	margin-left: -500px;
+	bottom: 100px;
+}
+
+#visualizationPage.active #data .dataItem{
+	width: 200px;
+	height: 100px;
+	float: left; 
+	margin-left: 40px;
+
+}
+
+#visualizationPage.active #data .dataItem#speed h2{
+	margin-left: 50px;
+}
+
+#visualizationPage.active #data .dataItem#distance h2{
+	margin-left: 5px;
+}
+
+#visualizationPage.active #data .dataItem#airtime h2{
+	margin-left: 38px;
+}
+
+#visualizationPage.active #data .dataItem#altitude h2{
+	margin-left: 20px;
+}
+
+
+#visualizationPage.active #data .dataItem .icon{
+	width: 50px;
+	height: 50px;
+	float: left;
+
+}
+
+#visualizationPage.active #data .dataItem .number{
+	font-family: medium;
+	font-size: 45px;
+	letter-spacing: 2px;
+	margin-left: 60px;
+	margin-top: 8px;
+	color: white;
+}
+
+#visualizationPage.active #data .dataItem span{
+		font-size: 25px;
+		margin-top: -15px;
+}
+
+#visualizationPage.active #data .dataItem h2{
+	font-family: book;
+	font-size: 25px;
+	color: rgb(150,150,150);
+	letter-spacing: 2px;
+	margin-top: 10px;
+	
+}
+
+
+
+
+#visualizationPage.active #data .dataItem#speed .icon{
+
+	background: url('../images/speed.png');
+	background-size: cover;
+}
+
+#visualizationPage.active #data .dataItem#distance .icon{
+
+	background: url('../images/distance.png');
+	background-size: cover;
+}
+
+#visualizationPage.active #data .dataItem#airtime .icon{
+
+	background: url('../images/airtime.png');
+	background-size: cover;
+}
+
+#visualizationPage.active #data .dataItem#altitude .icon{
+
+	background: url('../images/altitude.png');
+	background-size: cover;
 }

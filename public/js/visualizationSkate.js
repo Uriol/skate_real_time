@@ -16,7 +16,7 @@ function init_Visualization(){
 	//var centerX = centerPosition;
 	console.log('centerX' + centerPosition)
 	var backgroundColor = new THREE.Color("rgb(20, 20, 20)");
-	camera.position.set(0,120,140);
+	camera.position.set(0,120,160);
 	camera.lookAt(scene.position);
 	renderer.setClearColor( backgroundColor );
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -432,7 +432,7 @@ function init_Visualization(){
 	var limitsMesh = new THREE.Line( limits, limitsMaterial );
 	limitsMesh.position.y = -15;
 	limitsMesh.rotation.x = -Math.PI / 2;
-	scene.add(limitsMesh);
+	//scene.add(limitsMesh);
 
 	window.addEventListener( 'resize', onWindowResize, false );
 

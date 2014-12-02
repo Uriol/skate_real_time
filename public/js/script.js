@@ -3,6 +3,9 @@ var socket = io.connect('http://localhost:8080');
 var halfJump = false;
 var centerPosition;
 var interval = 0;
+var initial_y_onJumping;
+var final_y_onJumping;
+var jumpDistance;
 
 // Just landed a trick. Show me.
 $('#viewTrick').on('click', function(){
@@ -11,11 +14,37 @@ $('#viewTrick').on('click', function(){
 })
 
 // trick test
-$('#trickTest').on('click', function(){
+$('#trick_one').on('click', function(){
 
 	show_visualizationPage();
 	//render();
-	parseData(trickTest);
+	parseData(trick_one);
+	//console.log(trickTest);
+	switchState();
+	//console.log($total_x_positions);
+	init_Visualization();
+	animate();
+	resetValues();
+})
+
+$('#trick_two').on('click', function(){
+
+	show_visualizationPage();
+	//render();
+	parseData(trick_two);
+	//console.log(trickTest);
+	switchState();
+	//console.log($total_x_positions);
+	init_Visualization();
+	animate();
+	resetValues();
+})
+
+$('#trick_three').on('click', function(){
+
+	show_visualizationPage();
+	//render();
+	parseData(trick_three);
 	//console.log(trickTest);
 	switchState();
 	//console.log($total_x_positions);
@@ -99,7 +128,10 @@ function parseData( data ) {
 	}
 
 	total_time_on_air = airtime*0.02; 
-	console.log('total_time_on_air' + total_time_on_air);
+	// console.log('AIR TIME: ' + total_time_on_air);
+	// console.log('SPEED: ' + totalSpeed)
+
+
 	airSpeed = 0.5*gravity*total_time_on_air;
 	//console.log(airSpeed);
 }
@@ -107,6 +139,7 @@ function parseData( data ) {
 
 var thisState;
 var k;
+var jumpHeight;
 function switchState(){
 
 	for( k = 0; k < $state.length; k++) {
@@ -121,6 +154,17 @@ function switchState(){
 			onAir();
 		}
 	}
+
+	console.log('AIR TIME: ' + total_time_on_air);
+	console.log('SPEED: ' + totalSpeed);
+	console.log('HEIGHT: ' + jumpHeight.toFixed(2));
+	console.log('JUMP DISTANCE: ' + jumpDistance.toFixed(2));
+
+	// $('#airtime .number').text(total_time_on_air.toFixed(2));
+	// $('#airtime .number span').text('S');
+	$('#airtime h1').html(total_time_on_air.toFixed(2) + '<span> S</span></h1>');
+	$('#altitude h1').html(jumpHeight.toFixed(2) + '<span> M</span></h1>');
+	$('#distance h1').html(jumpDistance.toFixed(2) + '<span> M</span></h1>');
 }
 
 var totalSpeed = 2.5;
@@ -204,12 +248,12 @@ var air_interval = 0;
 var elapsed_time_on_air;
 var z_position = 0;
 function onAir(){
-	console.log("total_time_on_air====>: " + total_time_on_air);
+	//console.log("total_time_on_air====>: " + total_time_on_air);
 	// Calculate z position
 	console.log('on air');
 	air_interval += 1;
 	elapsed_time_on_air = air_interval*0.02;
-	console.log('elapsed_time_on_air: ' + elapsed_time_on_air);
+	//console.log('elapsed_time_on_air: ' + elapsed_time_on_air);
 
 
 	z_position = airSpeed*elapsed_time_on_air-0.5*gravity*elapsed_time_on_air*elapsed_time_on_air;
@@ -217,8 +261,9 @@ function onAir(){
 
 	// detect first jump moment
 	if (elapsed_time_on_air == 0.02) {
-		//console.log('first jump');
+		
 		initialYawOnJumping = $yaw[k];
+		initial_y_onJumping = yPosition;
 	}
 
 	// detect landing moment
@@ -226,11 +271,14 @@ function onAir(){
 		yawOnLanding = $yaw[k];
 		//console.log('landing');
 		calculateLanding();
+		final_y_onJumping = yPosition;
+		jumpDistance = final_y_onJumping - initial_y_onJumping;
+		// console.log('JUMP DISTANCE: ' + jumpDistance);
 	}
 
 	// Keep x and y speed and positions constant
 	xPosition = xInitialPosition + xSpeed*time;
-
+	//console.log('xPosition on air: ' + yPosition);
 	xInitialPosition = xPosition;
 	//console.log('xposition on air: ' + xPosition);
 
@@ -242,10 +290,13 @@ function onAir(){
 	if (elapsed_time_on_air >= total_time_on_air/2 && halfJump == false){
 		halfJump = true;
 		console.log('now --------------------------' + multiplier);
-
-		centerPosition = xPosition*100*interval/2;
-		console.log(centerPosition);
+		// console.log('HEIGHT: ' + z_position);
+		jumpHeight = z_position;
+		//centerPosition = xPosition*100*interval/2;
+		centerPosition = yPosition*100*-1;
+		console.log(xPosition + ' ---> ' + yPosition);
 	}
+
 
 
 	// }
@@ -328,7 +379,10 @@ function resetValues(){
 	$total_rolls = [];
 
 	interval = 0;
-
+	centerPosition = 0;
+	initial_y_onJumping = 0;
+	final_y_onJumping = 0;
+	halfJump = false;
 }
 
 

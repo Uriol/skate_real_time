@@ -1840,7 +1840,7 @@ var leftBottomLinePositions = [
 	[33, 3.7+increment, -3.5],
 	[33.5, 3.85+increment, -2.5],
 	[34, 4+increment, 0]
-]
+];
 
 var vertices = new Float32Array( leftBottomLinePositions.length * 3 ); // three components per vertex
 
