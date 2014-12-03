@@ -1,21 +1,45 @@
 var socket = io.connect('http://localhost:8080');
 
 var halfJump = false;
-var centerPosition;
+var centerPosition = 0;
 var interval = 0;
 var initial_y_onJumping;
 var final_y_onJumping;
-var jumpDistance;
+var jumpDistance = 0;
+var jumpHeight = 0;
+var recording = false;
+var totalSpeed = 2.3;
+var initialYaw, total_angle_diff;
+var pi = 3.14;
+var xSpeed, ySpeed;
+var xPosition = 0;
+var xInitialPosition = 0;
+var yPosition = 0;
+var yInitialPosition = 0;
+var time = 0.02;
 
+var minus180 = false;
+var plus180 = false;
 // Just landed a trick. Show me.
 $('#viewTrick').on('click', function(){
 	//console.log('show trick');
+	resetValues();
 	socket.emit('trick data');
+	// if (recording) {
+	// 	recording = false;
+	// 	socket.emit('trick data');
+	// 	console.log('Receiving data');
+	// } else {
+	// 	recording = true;
+	// 	socket.emit('trick start');
+	// 	console.log('Recording');
+	// }
 })
 
 // trick test
 $('#trick_one').on('click', function(){
 
+	resetValues();
 	show_visualizationPage();
 	//render();
 	parseData(trick_one);
@@ -24,11 +48,11 @@ $('#trick_one').on('click', function(){
 	//console.log($total_x_positions);
 	init_Visualization();
 	animate();
-	resetValues();
 })
 
 $('#trick_two').on('click', function(){
 
+	resetValues();
 	show_visualizationPage();
 	//render();
 	parseData(trick_two);
@@ -37,11 +61,11 @@ $('#trick_two').on('click', function(){
 	//console.log($total_x_positions);
 	init_Visualization();
 	animate();
-	resetValues();
 })
 
 $('#trick_three').on('click', function(){
 
+	resetValues();
 	show_visualizationPage();
 	//render();
 	parseData(trick_three);
@@ -50,7 +74,6 @@ $('#trick_three').on('click', function(){
 	//console.log($total_x_positions);
 	init_Visualization();
 	animate();
-	resetValues();
 })
 
 var line;
@@ -83,7 +106,7 @@ socket.on('trickData', function(trickData){
 	//onGround();
 	//console.log('---------------------------------------------------------------------------');
 	// reset all values to call next trick
-	resetValues();
+	//resetValues();
 	//console.log('reset y position: ' + yPosition);
 	//console.log('airtime: ' + airtime);
 	
@@ -108,6 +131,29 @@ function parseData( data ) {
 		line = data[i];
 		//console.log(line);
 
+		// if (line[0] == Number.isNaN()) {
+		// 	line[0] = $x_Accel[i-1];
+		// }
+
+		 if (isNaN(line[1]) == true) {
+		 	 line[1] = $z_Accel[i-1];
+			console.log('NaN detected' + $z_Accel[i-1])
+		 }
+
+
+		 if (isNaN(line[2]) == true) {
+		 	 line[2] = $yaw[i-1];
+		 }
+
+		 if (isNaN(line[3]) == true) {
+		 	 line[3] = $pitch[i-1];
+		 }
+
+		 if (isNaN(line[4]) == true) {
+		 	 line[4] = $roll[i-1];
+		 }
+
+
 		$x_Accel.push(line[0]);
 		$z_Accel.push(line[1]);
 		$yaw.push(line[2]);
@@ -115,20 +161,36 @@ function parseData( data ) {
 		$roll.push(line[4]);
 
 
-		// Check if its jumping
-		if (line[1] == 0){
-			state = 'ground';
-			$state.push(state);
-			
-		} else {
-			state = 'air';
-			$state.push(state);
-			airtime += 1;
-		}
+
 	}
 
-	total_time_on_air = airtime*0.02; 
-	// console.log('AIR TIME: ' + total_time_on_air);
+	var average = 0, 
+		sliced,
+		slice_num = 8,
+		slice_start = 0,
+		target_average = 0.5;
+	for (i=0; i<$z_Accel.length;++i) {
+		average = 0;
+		slice_start = i >= slice_num/2 ? i-slice_num/2 : 0;
+		sliced = $z_Accel.slice(slice_start, slice_start + slice_num);
+		sliced.forEach(function(value,index){
+			average += value == 0 ? 0 : 1;
+		});
+		average = average / slice_num;
+
+		if (average >= target_average) {
+			$state.push('air');
+			airtime += 1;
+		} else {
+			$state.push('ground');
+		}		
+	}
+
+	console.log('STATE length: ' + $state.length);
+
+	total_time_on_air = airtime*0.02;
+	console.log($state);
+	console.log('AIR TIME: ' + total_time_on_air);
 	// console.log('SPEED: ' + totalSpeed)
 
 
@@ -139,7 +201,7 @@ function parseData( data ) {
 
 var thisState;
 var k;
-var jumpHeight;
+// var jumpHeight;
 function switchState(){
 
 	for( k = 0; k < $state.length; k++) {
@@ -167,18 +229,20 @@ function switchState(){
 	$('#distance h1').html(jumpDistance.toFixed(2) + '<span> M</span></h1>');
 }
 
-var totalSpeed = 2.5;
-var initialYaw, total_angle_diff;
-var pi = 3.14;
-var xSpeed, ySpeed;
-var xPosition, xInitialPosition = 0;
-var yPosition, yInitialPosition = 0;
-var time = 0.02;
+// var totalSpeed = 2.5;
+// var initialYaw, total_angle_diff;
+// var pi = 3.14;
+// var xSpeed, ySpeed;
+// var xPosition, xInitialPosition = 0;
+// var yPosition, yInitialPosition = 0;
+// var time = 0.02;
 
-var minus180 = false;
-var plus180 = false;
+// var minus180 = false;
+// var plus180 = false;
 function onGround(){
 	console.log('on ground');
+	console.log('xPosition: ' + xPosition);
+	console.log('x initial position : ' + xInitialPosition);
 	elapsed_time_on_air = 0;
 	air_interval = 0;
 
@@ -197,7 +261,7 @@ function onGround(){
   	if ( minus180 == true ) { $yaw[k] = $yaw[k] - 180; $roll[k] = $roll[k] *-1; $pitch[k] = $pitch[k] *-1; }
 
 	initialYaw = $yaw[0];
-	//console.log('initialYaw: ' + initialYaw);
+	console.log('initialYaw: ' + initialYaw);
 
 	//for(var j = 0; j < $yaw.length; j++){
 		//console.log('yaw: ' + $yaw[j]);
@@ -216,12 +280,14 @@ function onGround(){
 
 		// Calculate x speed
 		xSpeed = totalSpeed*Math.sin(total_angle_diff);
-		//console.log('xSpeed: ' + xSpeed);
+		console.log('xSpeed: ' + xSpeed);
 		// Calculate x position
 		xPosition = xInitialPosition + xSpeed*time;
+
+		console.log('xPosition: ' + xPosition);
 		xInitialPosition = xPosition;
 		
-		//console.log('xposition: ' + xPosition);
+		console.log('xposition: ' + xPosition);
 
 		// Calculate y position
 		ySpeed = totalSpeed*Math.cos(total_angle_diff);
@@ -234,6 +300,7 @@ function onGround(){
 
 		z_position = 0;
 
+		$pitch[k] = 0;
 		// Save yaw, pitch, roll
 		$total_yaws.push(total_angle_diff);
 		$total_pitchs.push($pitch[k]);
@@ -383,6 +450,8 @@ function resetValues(){
 	initial_y_onJumping = 0;
 	final_y_onJumping = 0;
 	halfJump = false;
+	jumpDistance = 0;
+	jumpHeight = 0;
 }
 
 

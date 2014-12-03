@@ -1,4 +1,6 @@
-
+var ANIMATION_SPEED = 25,
+	ANIMATION_DELAY = 500; // Milliseconds between each frame
+var animationInterval;
 // Setup environment
 var camera, scene, renderer;
 camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -12,9 +14,18 @@ var multiplier = 100;
 
 function init_Visualization(){
 
-	var centerX = centerPosition*-1;
+	if (centerPosition == 'undefined') {
+		centerPosition = 0;
+		var centerX = centerPosition*-1;
+		console.log('center x is undefined: ' + centerX);
+		console.log('center position undefined: ' + centerPosition)
+	} else {
+	 	var centerX = centerPosition*-1;
+	 	console.log('center x: ' + centerX);
+	 	console.log('center position: ' + centerPosition)
+	}
 	//var centerX = centerPosition;
-	console.log('centerX' + centerPosition)
+	// console.log('centerX' + centerPosition)
 	var backgroundColor = new THREE.Color("rgb(20, 20, 20)");
 	camera.position.set(0,120,160);
 	camera.lookAt(scene.position);
@@ -172,17 +183,33 @@ function init_Visualization(){
 	}
 	leftBottomLine.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
 
+	var j = 0;
+	console.log('TOTAL:' + $total_x_positions.length);
+	setTimeout(function(){
 
-	for ( var i = 0; i < $total_x_positions.length; i ++ ) {
+	clearInterval(animationInterval);
+	animationInterval = setInterval(function(){
+
+		++j;
+		//console.log('Frame ' + j + ' / ' + $total_x_positions.length);
+
+		if ($total_x_positions.length == j) {
+			clearInterval(animationInterval);
+			resetValues();
+			return;
+		}
+	
+
+	//for ( var i = 0; i < $total_x_positions.length; i ++ ) {
 
 		// colors
 		var black = new THREE.Color("rgb(20,20,20)");
 
 		var skateboard = new THREE.Object3D();
 
-		this_x_position = $total_x_positions[i];
-		this_y_position = $total_y_positions[i];
-		this_z_position = $total_z_positions[i];
+		this_x_position = $total_x_positions[j];
+		this_y_position = $total_y_positions[j];
+		this_z_position = $total_z_positions[j];
 
 
 		var grey = new THREE.Color("rgb(40, 40, 40)");
@@ -198,97 +225,97 @@ function init_Visualization(){
 		}
 
 
-	// skateboard
-	// top
-	var topGeometry = new THREE.PlaneGeometry( 48,12 );
-	// var black = new THREE.Color("rgb(0,0,0)");
-	var topMaterial = new THREE.MeshBasicMaterial(  {color: black}  );
-	var top = new THREE.Mesh(topGeometry, topMaterial);
-	top.position.y = 2;
-	top.rotation.x = -Math.PI / 2;
-	skateboard.add(top);
+		// skateboard
+		// top
+		var topGeometry = new THREE.PlaneBufferGeometry( 48,12 );
+		// var black = new THREE.Color("rgb(0,0,0)");
+		var topMaterial = new THREE.MeshBasicMaterial(  {color: black}  );
+		var top = new THREE.Mesh(topGeometry, topMaterial);
+		top.position.y = 2;
+		top.rotation.x = -Math.PI / 2;
+		skateboard.add(top);
 
-	// bottom
-	var red = new THREE.Color("rgb(250,0,0)");
-	var bottomMaterial = new THREE.MeshBasicMaterial(  {color: black}  );
-	var bottomGeometry = new THREE.PlaneGeometry( 48,12 );
-	var bottom = new THREE.Mesh(bottomGeometry, bottomMaterial);
-	bottom.position.y = 1.5;
-	bottom.rotation.x = Math.PI / 2;
-	skateboard.add(bottom);
-	
-	// right edge
-	var edgeGeometry = new THREE.PlaneGeometry( 48,0.5 );
-	
-	
-	var rightEdge = new THREE.Mesh(edgeGeometry, rightEdgeMaterial);
-	rightEdge.position.y = 1.75;
-	rightEdge.position.z = 6;
-	skateboard.add(rightEdge);
+		// bottom
+		var red = new THREE.Color("rgb(250,0,0)");
+		var bottomMaterial = new THREE.MeshBasicMaterial(  {color: black}  );
+		var bottomGeometry = new THREE.PlaneBufferGeometry( 48,12 );
+		var bottom = new THREE.Mesh(bottomGeometry, bottomMaterial);
+		bottom.position.y = 1.5;
+		bottom.rotation.x = Math.PI / 2;
+		skateboard.add(bottom);
+		
+		// right edge
+		var edgeGeometry = new THREE.PlaneBufferGeometry( 48,0.5 );
+		
+		
+		var rightEdge = new THREE.Mesh(edgeGeometry, rightEdgeMaterial);
+		rightEdge.position.y = 1.75;
+		rightEdge.position.z = 6;
+		skateboard.add(rightEdge);
 
-	// left edge
-	var leftEdgeGeometry = new THREE.PlaneGeometry( 48,0.5 );
-	
-	
-	var leftEdge = new THREE.Mesh(leftEdgeGeometry, leftEdgeMaterial);
-	leftEdge.position.y = 1.75;
-	leftEdge.position.z = -6;
-	skateboard.add(leftEdge);
-	leftEdge.rotation.x = Math.PI;
+		// left edge
+		var leftEdgeGeometry = new THREE.PlaneBufferGeometry( 48,0.5 );
+		
+		
+		var leftEdge = new THREE.Mesh(leftEdgeGeometry, leftEdgeMaterial);
+		leftEdge.position.y = 1.75;
+		leftEdge.position.z = -6;
+		skateboard.add(leftEdge);
+		leftEdge.rotation.x = Math.PI;
 
-	var material = new THREE.MeshBasicMaterial( { color: black } );
-	
+		var material = new THREE.MeshBasicMaterial( { color: black } );
+		
 
-	if (this_z_position <= 0){
-		var greenMaterial =  new THREE.MeshBasicMaterial( { color: grey } );
-		var blueMaterial = new THREE.MeshBasicMaterial( { color: grey } );
-		var greenLineMaterial = new THREE.LineBasicMaterial( { color: grey, linewidth: 2, } );
-		var blueLineMaterial =  new THREE.LineBasicMaterial( { color: grey, linewidth: 2, } );
-	} else if(this_z_position > 0){
-		var greenMaterial =  new THREE.MeshBasicMaterial( { color: green } );
-		var blueMaterial = new THREE.MeshBasicMaterial( { color: blue } );
-		var greenLineMaterial = new THREE.LineBasicMaterial( { color: green, linewidth: 2, } );
-		var blueLineMaterial =  new THREE.LineBasicMaterial( { color: blue, linewidth: 2, } );
+		if (this_z_position <= 0){
+			var greenMaterial =  new THREE.MeshBasicMaterial( { color: grey } );
+			var blueMaterial = new THREE.MeshBasicMaterial( { color: grey } );
+			var greenLineMaterial = new THREE.LineBasicMaterial( { color: grey, linewidth: 2, } );
+			var blueLineMaterial =  new THREE.LineBasicMaterial( { color: grey, linewidth: 2, } );
+		} else if(this_z_position > 0){
+			var greenMaterial =  new THREE.MeshBasicMaterial( { color: green } );
+			var blueMaterial = new THREE.MeshBasicMaterial( { color: blue } );
+			var greenLineMaterial = new THREE.LineBasicMaterial( { color: green, linewidth: 2, } );
+			var blueLineMaterial =  new THREE.LineBasicMaterial( { color: blue, linewidth: 2, } );
 
-	}
-	
-	
+		}
+		
+		
 
-	// SKATEBOARD PARTS ----------------------------------------------------------
-	var topNoseMesh = new THREE.Mesh( noseTop, material );
-	topNoseMesh.material.side = THREE.DoubleSide;
+		// SKATEBOARD PARTS ----------------------------------------------------------
+		var topNoseMesh = new THREE.Mesh( noseTop, material );
+		topNoseMesh.material.side = THREE.DoubleSide;
 
-	var bottomNoseMesh = new THREE.Mesh( noseBottom, material );
-	bottomNoseMesh.material.side = THREE.DoubleSide;
+		var bottomNoseMesh = new THREE.Mesh( noseBottom, material );
+		bottomNoseMesh.material.side = THREE.DoubleSide;
 
-	var noseRightEdgeMesh = new THREE.Mesh( noseRightEdge, greenMaterial );
-	//bottomNoseMesh.material.side = THREE.DoubleSide;
+		var noseRightEdgeMesh = new THREE.Mesh( noseRightEdge, greenMaterial );
+		//bottomNoseMesh.material.side = THREE.DoubleSide;
 
-	var noseLeftEdgeMesh = new THREE.Mesh( noseLeftEdge, blueMaterial );
-	noseLeftEdgeMesh.material.side = THREE.DoubleSide;
+		var noseLeftEdgeMesh = new THREE.Mesh( noseLeftEdge, blueMaterial );
+		noseLeftEdgeMesh.material.side = THREE.DoubleSide;
 
-	var topTailMesh = new THREE.Mesh( tailTop, material );
+		var topTailMesh = new THREE.Mesh( tailTop, material );
 
-	var bottomTailMesh = new THREE.Mesh( tailBottom, material );
-	bottomTailMesh.material.side = THREE.DoubleSide;
+		var bottomTailMesh = new THREE.Mesh( tailBottom, material );
+		bottomTailMesh.material.side = THREE.DoubleSide;
 
-	var tailRightEdgeMesh = new THREE.Mesh( tailRightEdge, greenMaterial );
-	tailRightEdgeMesh.material.side = THREE.DoubleSide;
+		var tailRightEdgeMesh = new THREE.Mesh( tailRightEdge, greenMaterial );
+		tailRightEdgeMesh.material.side = THREE.DoubleSide;
 
-	var tailLeftEdgeMesh = new THREE.Mesh( tailLeftEdge, blueMaterial );
-	tailLeftEdgeMesh.material.side = THREE.DoubleSide;
+		var tailLeftEdgeMesh = new THREE.Mesh( tailLeftEdge, blueMaterial );
+		tailLeftEdgeMesh.material.side = THREE.DoubleSide;
 
-	var rightTopLineMesh = new THREE.Line( rightTopLine, greenLineMaterial );
-	var rightBottomLineMesh = new THREE.Line( rightBottomLine, greenLineMaterial );
+		var rightTopLineMesh = new THREE.Line( rightTopLine, greenLineMaterial );
+		var rightBottomLineMesh = new THREE.Line( rightBottomLine, greenLineMaterial );
 
-	var leftTopLineMesh = new THREE.Line( leftTopLine, blueLineMaterial );
-	var leftBottomLineMesh = new THREE.Line( leftBottomLine, blueLineMaterial );
+		var leftTopLineMesh = new THREE.Line( leftTopLine, blueLineMaterial );
+		var leftBottomLineMesh = new THREE.Line( leftBottomLine, blueLineMaterial );
 
 
-		$total_rolls[i] = $total_rolls[i]*pi/180;
-		$total_pitchs[i] = $total_pitchs[i]*pi/180;
+		$total_rolls[j] = $total_rolls[j]*pi/180;
+		$total_pitchs[j] = $total_pitchs[j]*pi/180;
 		// 'XYZ', 'YXZ', 'ZXY', 'ZYX', 'YZX', XZY
-		var euler =  new THREE.Euler(  $total_rolls[i], $total_yaws[i]*-1,$total_pitchs[i],'YZX');
+		var euler =  new THREE.Euler(  $total_rolls[j], $total_yaws[j]*-1,$total_pitchs[j],'YZX');
 		var quaternion = new THREE.Quaternion();
 		quaternion.setFromEuler(euler, 'YZX');
 
@@ -397,14 +424,15 @@ function init_Visualization(){
 		leftBottomLineMesh.updateMatrix();
 		scene.add(leftBottomLineMesh);
 
-	}
+	}, ANIMATION_SPEED );
+	}, ANIMATION_DELAY );
 
 	// var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ) );
 	// scene.add( object );
 
 	var black = new THREE.Color("rgb(20,20,20)");
 	var floorMaterial = new THREE.MeshBasicMaterial( { color: black } );
-	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+	var floorGeometry = new THREE.PlaneBufferGeometry(1000, 1000, 10, 10);
 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.position.y = -15;
 	floor.rotation.x = -Math.PI / 2;

@@ -33,14 +33,19 @@ canvas { width: 100%; height: 100% }
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	background-color: rgb(20,20,20);
+	/*background-color: rgb(20,20,20);*/
 }
 
 #sensorPage.inActive{
 	display: none;
 }
 
-
+#sensorPage #sensor{
+	width: 100%;
+	height: 700px;
+	/*position: absolute;*/
+	background-color: rgb(20,20,20);
+}
 
 #sensorPage #viewTrick{
 	width: 300px;
@@ -51,23 +56,28 @@ canvas { width: 100%; height: 100% }
 	background-size: cover;
 	cursor: pointer;
 	position: absolute;
-	margin-top: 100px;
+	margin-top: 130px;
 }
 #sensorPage #ready_text{
-	width: 200px;
+	width: 400px;
 	height: 50px;
 	
 	position: absolute;
-	margin-top: 400px;
-	margin-left: -100px;
+	margin-top: 450px;
+	margin-left: -200px;
 	left: 50%;
 	text-align: center;
 	color: white;
 	letter-spacing: 1px;
 	font-family: medium;
-	font-size: 20px;
+	font-size: 40px;
 }
-
+#sensorPage #ready_text p{ 
+	font-size: 18px;
+	font-family: book;
+	margin-top: 5px;
+	letter-spacing: 1px;
+}
 /*#sensorPage #ready_text h2{
 	color: white;
 	text-align: center;
@@ -76,40 +86,61 @@ canvas { width: 100%; height: 100% }
 
 }*/
 
-#sensorPage #previusTricks{
-	width: 1350px;
-	/*background-color: red;*/ 
-/*	height: 500px;*/
-	/*background-color: rgb(184, 228, 20);*/
+/*#sensorPage #previusTricks{
+	width: 100%;
+	background-color: red; 
+	height: 500px;
+	background-color: rgb(184, 228, 20);
 	position: absolute;
-	margin-top: 550px;
-	margin-left: -655px;
-	left:50%;
-	/*//bottom: 0px;*/
-	/*margin-left: -565.5px;
-	left: 50%;*/
-}
+	margin-top: 800px;
 
-#sensorPage #previusTricks .trick{
-	width: 400px;
-	margin-top: 20px;
-	height: 300px;
-	
-	float: left;
-	margin-right: 40px;
+}*/
+
+#sensorPage .trick#trick_one{
+	width: 950px;
+	margin-top: 40px;
+	height: 534px;
+	margin-left: -475px;
+	left: 50%;
+	position: absolute;
 	cursor: pointer;
-	/*background-color: yellow;*/
-	 border-style: solid;
-    border-width: 5px;
-    border-color: white;
-}
-
-#sensorPage #previusTricks .trick#trick_one{
-	background: url('../images/trick_one_final.jpg');
+	background: url('../images/trick_one_final2.jpg');
 	background-size: cover;
 }
 
-#sensorPage #previusTricks .trick#trick_two{
+#sensorPage .trick#trick_two{
+	width: 950px;
+	margin-top: 614px;
+	height: 534px;
+	margin-left: -475px;
+	left: 50%;
+	position: absolute;
+	cursor: pointer;
+	background: url('../images/trick_two_final2.jpg');
+	background-size: cover;
+}
+
+
+#sensorPage .trick#trick_three{
+	width: 950px;
+	margin-top: 1188px;
+	height: 534px;
+	margin-left: -475px;
+	left: 50%;
+	position: absolute;
+	cursor: pointer;
+	background: url('../images/trick_three_final2.jpg');
+	background-size: cover;
+	padding-bottom: 40px;
+}
+
+
+/*#sensorPage #previusTricks .trick#trick_one{
+	background: url('../images/trick_one_final.jpg');
+	background-size: cover;
+}*/
+
+/*#sensorPage #previusTricks .trick#trick_two{
 	background: url('../images/trick_two_final.jpg');
 	background-size: cover;
 }
@@ -117,7 +148,7 @@ canvas { width: 100%; height: 100% }
 #sensorPage #previusTricks .trick#trick_three{
 	background: url('../images/trick_three_final.jpg');
 	background-size: cover;
-}
+}*/
 
 
 /*#sensorPage #trickTest {

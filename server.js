@@ -12,26 +12,31 @@ var btSerial = new (require('bluetooth-serial-port')).BluetoothSerialPort();
 
 // connect to the sensor bluetooth
 btSerial.on('found', function(address, name) {
-    btSerial.findSerialPortChannel(address, function(channel) {
-        btSerial.connect(address, channel, function() {
-            console.log('sensor connected');
+	console.log('Found: ' + address + ' - ' + name);
+	if (name.toLowerCase().indexOf('skate') > -1) {
+	    btSerial.findSerialPortChannel(address, function(channel) {
+			console.log('findSerialPortChannel: ' + address + ' - ' + name);
+	        btSerial.connect(address, channel, function() {
+				console.log('connect: ' + address + ' - ' + name);
+	            console.log('sensor connected');
 
-            
-            btSerial.on('data', function(buffer) {
-				parse( buffer.toString() );
+	            
+	            btSerial.on('data', function(buffer) {
+					parse( buffer.toString() );
 
-            });
+	            });
 
-        }, function () {
-            console.log('cannot connect');
-        });
+	        }, function () {
+	            console.log('cannot connect');
+	        });
 
-        // close the connection when you're ready
-        btSerial.close();
+	        // close the connection when you're ready
+	        btSerial.close();
 
-    }, function() {
-        console.log('found nothing');
-    });
+	    }, function() {
+	        console.log('found nothing');
+	    });
+	}
 });
 
 btSerial.inquire();
@@ -152,14 +157,20 @@ var trickData;
 			console.log(data);
 		})
 
+		socket.on('trick start', function(){
+			console.log('start recording data');
+			$data = [];
+		})
+
+
 		socket.on('trick data', function(){
 			console.log('recieved send me data');
 			
 			if ($data.length >= 21){
-				trickData = $data.slice(-150);
+				trickData = $data.slice(-250);
 				console.log(trickData);
 				socket.emit('trickData', trickData);
-			}	else if ($data.length <= 149){
+			}	else if ($data.length <= 249){
 				console.log('not enought data recorded');
 				socket.emit('not enought');
 			}
