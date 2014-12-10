@@ -81,9 +81,12 @@ boolean output_errors = false;  // true or false
 
 // Magnetometer (extended calibration mode)
 // Uncommend to use extended magnetometer calibration (compensates hard & soft iron errors)
+//#define CALIBRATION__MAGN_USE_EXTENDED true
+//const float magn_ellipsoid_center[3] = {29.6772, 250.262, -17.7117};
+//const float magn_ellipsoid_transform[3][3] = {{0.889256, 0.000807715, -0.0243454}, {0.000807715, 0.941979, -0.00975540}, {-0.0243454, -0.00975540, 0.992947}};
 #define CALIBRATION__MAGN_USE_EXTENDED true
-const float magn_ellipsoid_center[3] = {29.6772, 250.262, -17.7117};
-const float magn_ellipsoid_transform[3][3] = {{0.889256, 0.000807715, -0.0243454}, {0.000807715, 0.941979, -0.00975540}, {-0.0243454, -0.00975540, 0.992947}};
+const float magn_ellipsoid_center[3] = {69.0168, 148.441, -63.7616};
+const float magn_ellipsoid_transform[3][3] = {{0.887121, 0.00404592, -0.0370942}, {0.00404592, 0.932897, -0.00899605}, {-0.0370942, -0.00899605, 0.986218}};
 // Gyroscope
 // "gyro x,y,z (current/average) = .../OFFSET_X  .../OFFSET_Y  .../OFFSET_Z
 #define GYRO_AVERAGE_OFFSET_X ((float) -29) // -29

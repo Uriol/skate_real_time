@@ -4,7 +4,7 @@ float S = 0.00390625;
 float _yaw,_pitch, _roll;
 float q[4];
 float  gx, gy, gz;
-float fx,fz;
+float fx,fz,fy;
 
 void output_angles()
 { 
@@ -50,9 +50,13 @@ void output_angles()
 //    fz = 0;
 //  }
       fz = fz*10;
-      if (fz <= 5 && fz >= -5){
-    fz = 0;
-  }
+      
+      gy = gy*-1;
+      fy = ry - gy;
+      fy = fy*10;
+//      if (fz <= 5 && fz >= -5){
+//    fz = 0;
+//  }
 //  Serial.print("gravity: ");
 //  Serial.println(gx);
 //  Serial.print("acceleration: ");
@@ -69,7 +73,7 @@ void output_angles()
 
   
   
-  Serial1.print(fx); Serial1.print(",");
+  Serial1.print(fy); Serial1.print(",");
   Serial1.print(fz); Serial1.print(",");
   Serial1.print(_yaw); Serial1.print(",");
   Serial1.print(_pitch); Serial1.print(",");
