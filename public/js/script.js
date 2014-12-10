@@ -303,14 +303,14 @@ function onGround(){
 
 	//for(var j = 0; j < $yaw.length; j++){
 		//console.log('yaw: ' + $yaw[j]);
-		if ($yaw[k] < 0 && initialYaw > 0) {
-			total_angle_diff = $yaw[k] - initialYaw;
-		} else if ($yaw[k] > 0 && initialYaw < 0 ){
-			total_angle_diff = $yaw[k] + initialYaw;
-		} else {
-			total_angle_diff = $yaw[k] - initialYaw;
-		}
-
+		// if ($yaw[k] < 0 && initialYaw > 0) {
+		// 	total_angle_diff = $yaw[k] - initialYaw;
+		// } else if ($yaw[k] > 0 && initialYaw < 0 ){
+		// 	total_angle_diff = $yaw[k] + initialYaw;
+		// } else {
+		// 	total_angle_diff = $yaw[k] - initialYaw;
+		// }
+		total_angle_diff = $yaw[k] - initialYaw;
 
 		// transform it to radians
 		total_angle_diff = total_angle_diff*pi/180;
