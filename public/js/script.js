@@ -96,12 +96,13 @@ $('#trick_three').on('click', function(){
 })
 
 var line;
-var $x_Accel = [],
+var $y_Accel = [],
 	$z_Accel = [],
 	$yaw = [],
 	$pitch = [],
 	$roll = [],
-	$state = [];
+	$state = [],
+	$air_ground = [];
 
 var $total_x_positions = [];
 var $total_y_positions = [];
@@ -151,12 +152,12 @@ function parseData( data ) {
 		//console.log(line);
 
 		// if (line[0] == Number.isNaN()) {
-		// 	line[0] = $x_Accel[i-1];
+		// 	line[0] = $y_Accel[i-1];
 		// }
 
 		// z accel transform to decimal
-		line[1] = line[1]/10;
-		console.log(line[1]);
+		// line[1] = line[1]/10;
+		console.log(line[1] + 'z_Accel');
 
 		 if (isNaN(line[1]) == true) {
 		 	 line[1] = $z_Accel[i-1];
@@ -177,7 +178,19 @@ function parseData( data ) {
 		 }
 
 
-		$x_Accel.push(line[0]);
+		// Reset to zero if y accel is to small
+		if (line[0] <= 5 && line[0] >= -5){ line[0] = 0; } 
+		
+
+		// Reset to zero if z accel is to small
+		if (line[1] <= 5 && line[1] >= -5){ line[1] = 0; console.log("accel is zero")} 
+		
+		if (line[0] !== 0 || line[1] !== 0) {
+			$air_ground.push(1);
+		} else { $air_ground.push(0);}
+
+
+		$y_Accel.push(line[0]);
 		$z_Accel.push(line[1]);
 		$yaw.push(line[2]);
 		$pitch.push(line[3]);
@@ -192,10 +205,10 @@ function parseData( data ) {
 		slice_num = 8,
 		slice_start = 0,
 		target_average = 0.5;
-	for (i=0; i<$z_Accel.length;++i) {
+	for (i=0; i<$air_ground.length;++i) {
 		average = 0;
 		slice_start = i >= slice_num/2 ? i-slice_num/2 : 0;
-		sliced = $z_Accel.slice(slice_start, slice_start + slice_num);
+		sliced = $air_ground.slice(slice_start, slice_start + slice_num);
 		sliced.forEach(function(value,index){
 			//if (value < 0){ value = value*-1;}
 			average += value == 0 ? 0 : 1;
@@ -456,12 +469,13 @@ function resetValues(){
 	total_angle_diff = 0; xSpeed = 0; ySpeed = 0; xPosition = 0; xInitialPosition = 0;
 	yPosition = 0; yInitialPosition = 0;
 
-	$x_Accel = [],
+	$y_Accel = [],
 	$z_Accel = [],
 	$yaw = [],
 	$pitch = [],
 	$roll = [],
 	$state = [];
+	$air_ground = [];
 
 	$total_x_positions = [];
 	$total_y_positions = [];
