@@ -63,12 +63,12 @@ boolean output_errors = false;  // true or false
 // Put MIN/MAX and OFFSET readings for your board here!
 // Accelerometer
 // "accel x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
-#define ACCEL_X_MIN ((float) -271) // -271, -274, -271
-#define ACCEL_X_MAX ((float) 248) // 247, 253, 249, 248
-#define ACCEL_Y_MIN ((float) -248) // -248, -253, -249, -246,-248
-#define ACCEL_Y_MAX ((float) 274) // 274, 273, 276, 274
-#define ACCEL_Z_MIN ((float) -239) // -239
-#define ACCEL_Z_MAX ((float) 245) // 245
+#define ACCEL_X_MIN ((float) -261)  // -262, -261, 
+#define ACCEL_X_MAX ((float) 250) // 253, 249, 255, 250, 
+#define ACCEL_Y_MIN ((float) -251) // -251, 251, 
+#define ACCEL_Y_MAX ((float) 272)  //275, 269,272, 271,272
+#define ACCEL_Z_MIN ((float) -245)  //
+#define ACCEL_Z_MAX ((float) 251)  // 
 
 // Magnetometer (standard calibration mode)
 // "magn x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
@@ -81,19 +81,14 @@ boolean output_errors = false;  // true or false
 
 // Magnetometer (extended calibration mode)
 // Uncommend to use extended magnetometer calibration (compensates hard & soft iron errors)
-//#define CALIBRATION__MAGN_USE_EXTENDED true
-//const float magn_ellipsoid_center[3] = {294.457, 197.564, -57.5767};
-//const float magn_ellipsoid_transform[3][3] = {{0.902344, -0.0112702, -0.0313276}, {-0.0112702, 0.973643, -0.00193660}, {-0.0313276, -0.00193660, 0.989838}};
-
 #define CALIBRATION__MAGN_USE_EXTENDED true
-const float magn_ellipsoid_center[3] = {294.457, 197.564, -57.5767};
-const float magn_ellipsoid_transform[3][3] = {{0.902344, -0.0112702, -0.0313276}, {-0.0112702, 0.973643, -0.00193660}, {-0.0313276, -0.00193660, 0.989838}};
-
+const float magn_ellipsoid_center[3] = {29.6772, 250.262, -17.7117};
+const float magn_ellipsoid_transform[3][3] = {{0.889256, 0.000807715, -0.0243454}, {0.000807715, 0.941979, -0.00975540}, {-0.0243454, -0.00975540, 0.992947}};
 // Gyroscope
 // "gyro x,y,z (current/average) = .../OFFSET_X  .../OFFSET_Y  .../OFFSET_Z
-#define GYRO_AVERAGE_OFFSET_X ((float) -22) // -22
-#define GYRO_AVERAGE_OFFSET_Y ((float) 74) // 74
-#define GYRO_AVERAGE_OFFSET_Z ((float) -14) // -14
+#define GYRO_AVERAGE_OFFSET_X ((float) -29) // -29
+#define GYRO_AVERAGE_OFFSET_Y ((float) -11) // -11
+#define GYRO_AVERAGE_OFFSET_Z ((float) -12) // 12
 
 
 // -----------------------------------------------------------------------------------------------------------------------------------

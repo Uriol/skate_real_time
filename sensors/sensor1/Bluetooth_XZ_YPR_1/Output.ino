@@ -46,13 +46,13 @@ void output_angles()
 //  if (fz <= 0.99 && fz >= -0.99){
 //    fz = 0;
 //  }
-//    if (fz <= 0.50 && fz >= -0.50){
-//    fz = 0;
-//  }
-      fz = fz*10;
+
+//----------------------------------------------------------------
+  fz = fz*10;
       if (fz <= 5 && fz >= -5){
     fz = 0;
   }
+  
 //  Serial.print("gravity: ");
 //  Serial.println(gx);
 //  Serial.print("acceleration: ");
